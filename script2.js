@@ -1,11 +1,13 @@
+console.log(DATA);
+console.log(my_key);
 function manageCalls() {
   let idx = 0;
   const intervalId = setInterval(function() {
-    if (++idx === origin1.length) {
+    if (++idx === DATA.length) {
       return clearInterval(intervalId);
     }
     let nextSite = [];
-    nextSite.push(origin1[idx]);
+    nextSite.push(DATA[idx]);
     initMap(nextSite, 'DRIVING');
     //console.log(nextSite);
   }, 200);
@@ -50,37 +52,59 @@ function writeData(response, status) {
     }
   }
 }
-console.log(durationData);
-function theSum(numbers){
+
+function theSum(numbers) {
   return numbers.reduce(function(a, b) {
     return a + b;
   }, 0);
 }
 
-function theMean(someData){
+function theMean(someData) {
   return theSum(someData) / someData.length;
 }
 
-function theMedian(someData){
+function theMedian(someData) {
   let dataCopy = someData;
-  if (dataCopy.length === 0){
+  if (dataCopy.length === 0) {
     return 0;
   }
-  dataCopy.sort(function(a, b){
-    return a-b;
+  dataCopy.sort(function(a, b) {
+    return a - b;
   });
-  if (dataCopy.length % 2 === 0){
+  if (dataCopy.length % 2 === 0) {
     let preMid = dataCopy[(dataCopy.length) / 2 - 1];
     let postMid = dataCopy[(dataCopy.length) / 2];
     return theMean([preMid, postMid]);
-  }else{
+  } else {
     return dataCopy[(dataCopy.length - 1) / 2];
   }
 }
 
-function secondsToMinutes(duration){
+function secondsToMinutes(duration) {
   return duration / 60;
 }
-function getMedianMinutes(data){
+
+function getMedianMinutes(data) {
   return secondsToMinutes(theMedian(data));
+}
+
+
+
+function percentiles(data, numOfBins){
+  let dataCopy = data;
+  let dataOut = [];
+  if (numOfBins < 1){
+    console.log("did you forget the bins parameter?");
+    return;
+  }
+  dataCopy.sort(function(a,b){
+    return a-b;
+  });
+  // length / num of bins = size of numOfBins
+  for (let i = 0; i < numOfBins; i++){
+    let idx = Math.floor(i * data.length / numOfBins);
+    console.log("bin " + i + ":  " + data[idx]);
+    dataOut.push(data[idx]);
+  }
+  return dataOut;
 }
